@@ -12,11 +12,14 @@ export default {
         const response = await fetch(serverStatusUrl);
 
         if (response.ok) {
-          return new Response('online', { status: 200 });
+          console.log('Server is online');
+          return new Response('Server is online', { status: 200 });
         } else {
-          return new Response('offline', { status: 500 });
+          console.log('Server is offline');
+          return new Response('Server is offline', { status: 500 });
         }
       } catch (error) {
+        console.error('Error checking server status:', error);
         return new Response('Error checking server status', { status: 500 });
       }
     }
