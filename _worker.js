@@ -5,7 +5,7 @@ export default {
     // Check if the request is for the server status endpoint
     if (url.pathname.startsWith('/api/serverStatus')) {
       const serverIP = 'play.worldofpal.com';
-      const serverPort = 8123;
+      const serverPort = 8211;
       const serverStatusUrl = `http://${serverIP}:${serverPort}/status`;
 
       try {
