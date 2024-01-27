@@ -1,30 +1,35 @@
-export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
+import { connect } from 'cloudflare:sockets';
 
+export default {
+  
+  async fetch(request: Request) {
+    
     // Check if the request is for the server status endpoint
     if (url.pathname.startsWith('/api/serverStatus')) {
+      
       const serverIP = 'play.worldofpal.com';
       const serverPort = 8211;
-      const serverStatusUrl = `http://${serverIP}:${serverPort}/status`;
-
+      
+      const address = `${serverIP}:${serverPort}`;
+      const url = new URL(request.url);
+  
       try {
-        const response = await fetch(serverStatusUrl);
+        
+        const socket = connect(address);
+  
+        const writer = socket.writable.getWriter()
+        const encoder = new TextEncoder();
+        const encoded = encoder.encode(url.pathname + "\r\n");
+        await writer.write(encoded);
 
-        if (response.ok) {
-          console.log('Server is online');
-          return new Response('Server is online', { status: 200 });
-        } else {
-          console.log('Server is offline');
-          return new Response('Server is offline', { status: 500 });
-        }
+        console.log('Server is online');
+        return new Response("online: " + socket.readable, { headers: { status: 200, "Content-Type": "text/plain" } });
+        
       } catch (error) {
-        console.error('Error checking server status:', error);
-        return new Response('Error checking server status', { status: 500 });
+
+        console.log('Server is offline');
+        return new Response("onffline: " + error, { status: 500, "Content-Type": "text/plain" });
       }
     }
-
-    // Serve static assets for other paths
-    return env.ASSETS.fetch(request);
-  },
+  }
 };
