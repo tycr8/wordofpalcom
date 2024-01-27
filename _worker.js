@@ -1,8 +1,7 @@
 import { connect } from 'cloudflare:sockets';
 
-export default {
-  
-  async fetch(request: Request) {
+  async fetch(request, env) {
+    const url = new URL(request.url);
     
     // Check if the request is for the server status endpoint
     if (url.pathname.startsWith('/api/serverStatus')) {
@@ -11,7 +10,6 @@ export default {
       const serverPort = 8211;
       
       const address = `${serverIP}:${serverPort}`;
-      const url = new URL(request.url);
   
       try {
         
