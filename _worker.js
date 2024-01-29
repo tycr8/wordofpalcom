@@ -1,4 +1,4 @@
-import { connect } from 'cloudflare:sockets';
+/* import { connect } from 'cloudflare:sockets';
 
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -31,3 +31,4 @@ import { connect } from 'cloudflare:sockets';
     }
   }
 };
+*/
